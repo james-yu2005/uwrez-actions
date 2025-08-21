@@ -1,26 +1,32 @@
-name: Ping Astra DB Every 10 Minutes
+name: Daily Database Connection Check
 
 on:
   schedule:
-    - cron: "*/10 * * * *"  # every 10 minutes UTC
-  workflow_dispatch:        # manual trigger option
+    # Runs daily at 9:00 AM UTC (adjust time as needed)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
-  ping-db:
+  database-check:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install astrapy requests
-
-      - name: Run alive script
-        env:
-          ASTRA_TOKEN: ${{ secrets.ASTRA_TOKEN }}
-        run: python alive.py
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install astrapy
+        
+    - name: Run database connection check
+      env:
+        DB_TOKEN: ${{ secrets.DB_TOKEN }}
+        DB_ENDPOINT: ${{ secrets.DB_ENDPOINT }}
+        DB_KEYSPACE: ${{ secrets.DB_KEYSPACE }}
+      run: python alive.py
