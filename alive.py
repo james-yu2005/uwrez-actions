@@ -1,8 +1,8 @@
 from astrapy import DataAPIClient
 
-ASTRA_API_ENDPOINT = os.environ.get("ASTRA_API_ENDPOINT")
-AUTH_TOKEN = os.environ.get("ASTRA_AUTH_TOKEN")
-keyspace = os.environ.get("default_keyspace")
+endpoint = os.environ.get("ASTRA_API_ENDPOINT")
+token = os.environ.get("ASTRA_AUTH_TOKEN")
+keyspace = os.environ.get("KEYSPACE")
 
 client = DataAPIClient(token)
 db = client.get_database_by_api_endpoint(endpoint, keyspace=keyspace)
