@@ -1,27 +1,26 @@
-name: Astra Keep Alive
+name: Ping Astra DB Every 10 Minutes
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes
-  workflow_dispatch:         # allow manual trigger
+    - cron: "*/10 * * * *"  # every 10 minutes UTC
+  workflow_dispatch:        # manual trigger option
 
 jobs:
-  ping-astra:
+  ping-db:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install astrapy requests
 
-      - name: Run alive.py
+      - name: Run alive script
         env:
-          ASTRA_API_ENDPOINT: ${{ secrets.ASTRA_API_ENDPOINT }}
-          ASTRA_AUTH_TOKEN: ${{ secrets.ASTRA_AUTH_TOKEN }}
+          ASTRA_TOKEN: ${{ secrets.ASTRA_TOKEN }}
         run: python alive.py
