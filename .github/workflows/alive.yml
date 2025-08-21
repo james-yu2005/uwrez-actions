@@ -1,0 +1,27 @@
+name: Astra Keep Alive
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes
+  workflow_dispatch:         # allow manual trigger
+
+jobs:
+  ping-astra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run keep_alive.py
+        env:
+          ASTRA_API_ENDPOINT: ${{ secrets.ASTRA_API_ENDPOINT }}
+          ASTRA_AUTH_TOKEN: ${{ secrets.ASTRA_AUTH_TOKEN }}
+        run: python keep_alive.py
